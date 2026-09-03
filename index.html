@@ -456,8 +456,10 @@
     <div class="section-tag">Get started</div>
     <h2>Point it at one model. See what your team's been missing.</h2>
     <p class="section-desc">We run a scoped pilot on your real decisions, whether underwriting, claims, fraud, or quality control, usually within a few weeks and with no changes to your existing models. You'll see exactly which decisions GAMATIQ would have flagged, and what that's worth.</p>
-    <form class="cta-form" onsubmit="event.preventDefault(); this.querySelector('input').value=''; this.querySelector('button').textContent='Request sent ✓';">
-      <input type="email" placeholder="you@company.com" required>
+    <form class="cta-form" id="briefingForm">
+      <input type="email" name="email" placeholder="you@company.com" autocomplete="email" required>
+      <input type="hidden" name="_subject" value="New customer booked a briefing">
+      <input type="hidden" name="_template" value="table">
       <button class="btn btn-gold" type="submit">Book a briefing</button>
     </form>
   </div>
@@ -578,6 +580,53 @@
       });
     });
     render('life');
+  })();
+
+  // ---------- briefing form ----------
+  (function(){
+    var form = document.getElementById('briefingForm');
+    if(!form) return;
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+
+      var button = form.querySelector('button');
+      var input = form.querySelector('input[type="email"]');
+      var email = input.value;
+      var originalText = button.textContent;
+
+      button.disabled = true;
+      button.textContent = 'Sending…';
+
+      fetch('https://formsubmit.co/ajax/customercare@gamatiq.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          _subject: 'New customer booked a briefing',
+          _template: 'table'
+        })
+      })
+      .then(function(response){
+        if(!response.ok) throw new Error('Submission failed');
+        return response.json();
+      })
+      .then(function(){
+        input.value = '';
+        button.textContent = 'Request sent ✓';
+        setTimeout(function(){
+          button.textContent = originalText;
+          button.disabled = false;
+        }, 4000);
+      })
+      .catch(function(){
+        button.textContent = 'Please try again';
+        button.disabled = false;
+      });
+    });
   })();
 
   // ---------- contact modal ----------

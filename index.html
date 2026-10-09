@@ -456,7 +456,7 @@
     <div class="section-tag">Get started</div>
     <h2>Point it at one model. See what your team's been missing.</h2>
     <p class="section-desc">We run a scoped pilot on your real decisions, whether underwriting, claims, fraud, or quality control, usually within a few weeks and with no changes to your existing models. You'll see exactly which decisions GAMATIQ would have flagged, and what that's worth.</p>
-    <form class="cta-form" id="briefingForm" action="https://formspree.io/f/https://formspree.io/f/xvkzrppe" method="POST">
+    <form class="cta-form" id="briefingForm" action="https://formspree.io/f/xvkzrppe" method="POST">
       <input type="email" name="email" placeholder="you@company.com" autocomplete="email" required>
       <input type="hidden" name="_subject" value="New customer booked a briefing">
       <button class="btn btn-gold" type="submit">Book a briefing</button>
@@ -596,12 +596,6 @@
 
       button.disabled = true;
       button.textContent = 'Sending…';
-
-      if(form.action.includes('https://formspree.io/f/xvkzrppe')){
-        button.textContent = 'Configure Formspree first';
-        button.disabled = false;
-        return;
-      }
 
       fetch(form.action, {
         method: 'POST',
